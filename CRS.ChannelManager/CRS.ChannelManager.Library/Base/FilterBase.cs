@@ -45,33 +45,60 @@ namespace CRS.ChannelManager.Library.Base
                 if (!GroupFilters.Any()) throw new InvalidOperationException("No filters provided.");
 
                 var parameter = Expression.Parameter(typeof(T), "g");
-                Expression combinedExpression = null;
-
-                foreach (var filter in GroupFilters.First().Filters)
+                List<Expression> lstCombinedExpression = new List<Expression>();
+                Expression combinedExpressionGroup = null;
+                foreach (var filter in GroupFilters)
                 {
-                    var expression = filter.BuildExpression<T>();
-                    if (expression != null)
+                    Expression combinedExpression = null;
+                    if (filter != null)
                     {
-                        var invokedExpr = Expression.Invoke(expression, parameter);
-
-                        if (combinedExpression == null)
+                        foreach (var item in filter.Filters)
                         {
-                            combinedExpression = invokedExpr;
+                            var expression = item.BuildExpression<T>();
+                            if (expression != null)
+                            {
+                                var invokedExpr = Expression.Invoke(expression, parameter);
+
+                                if (combinedExpression == null)
+                                {
+                                    combinedExpression = invokedExpr;
+                                }
+                                else
+                                {
+                                    combinedExpression = filter.Condition.Equals(ConditionAnd, StringComparison.OrdinalIgnoreCase)
+                                        ? Expression.AndAlso(combinedExpression, invokedExpr)
+                                        : Expression.OrElse(combinedExpression, invokedExpr);
+                                }
+                            }
+                        }
+                    }
+                    if (combinedExpression != null)
+                    {
+                        lstCombinedExpression.Add(combinedExpression);
+                    }
+                }
+                if (lstCombinedExpression.Any())
+                {
+                    foreach (var item in lstCombinedExpression)
+                    {
+                        if (combinedExpressionGroup == null)
+                        {
+                            combinedExpressionGroup = item;
                         }
                         else
                         {
-                            combinedExpression = Condition.Equals(ConditionAnd, StringComparison.OrdinalIgnoreCase)
-                                ? Expression.AndAlso(combinedExpression, invokedExpr)
-                                : Expression.OrElse(combinedExpression, invokedExpr);
+                            combinedExpressionGroup = Condition.Equals(ConditionAnd, StringComparison.OrdinalIgnoreCase)
+                                                  ? Expression.AndAlso(combinedExpressionGroup, item)
+                                                  : Expression.OrElse(combinedExpressionGroup, item);
                         }
                     }
+                }
 
-                }
-                if (combinedExpression == null)
+                if (combinedExpressionGroup == null)
                 {
-                    combinedExpression = Expression.Constant(true);
+                    combinedExpressionGroup = Expression.Constant(true);
                 }
-                return Expression.Lambda<Func<T, bool>>(combinedExpression, parameter);
+                return Expression.Lambda<Func<T, bool>>(combinedExpressionGroup, parameter);
             }
         }
 
@@ -219,16 +246,46 @@ namespace CRS.ChannelManager.Library.Base
                     ConstantExpression value;
                     if (Nullable.GetUnderlyingType(nestedProperty.Type) != null)
                     {
-                        // Nếu là nullable, chuyển đổi sang kiểu không nullable trước, sau đó tạo nullable
-                        var targetType = Nullable.GetUnderlyingType(nestedProperty.Type);
-                        var valueNew = Convert.ChangeType(Value, targetType);
-                        if (targetType == typeof(DateTime))
+                        if (Value.GetType().Name == typeof(IEnumerable<>).Name || Value.GetType().Name == typeof(List<>).Name || Value.GetType().Name == typeof(ICollection<>).Name)
                         {
-                            value = Expression.Constant(valueNew);
+                            var valueList = (List<object>)Value;
+                            List<ConstantExpression> constantValues = new List<ConstantExpression> { };
+                            // Nếu là nullable, chuyển đổi sang kiểu không nullable trước, sau đó tạo nullable
+                            if (Nullable.GetUnderlyingType(nestedProperty.Type) != null)
+                            {
+                                var targetType = Nullable.GetUnderlyingType(nestedProperty.Type);
+                                constantValues = valueList.Select(val => Expression.Constant(Activator.CreateInstance(typeof(Nullable<>).MakeGenericType(targetType ?? nestedProperty.Type), val))).ToList();
+                            }
+                            else
+                            {
+                                constantValues = valueList.Select(val => Expression.Constant(Convert.ChangeType(val, nestedProperty.Type))).ToList();
+                            }
+                            List<Expression> expressionList = new List<Expression>();
+                            foreach (var item in constantValues)
+                            {
+                                var expressionChild = GetExpression(nestedProperty, item);
+                                expressionList.Add(expressionChild);
+                            }
+                            if (!expressionList.Any())
+                            {
+                                return null;
+                            }
+                            var body = expressionList.Aggregate((e, next) => Operator == OperatorNotIn ? Expression.AndAlso(e, next) : Expression.OrElse(e, next));
+                            return Expression.Lambda<Func<T, bool>>(body, parameter);
                         }
                         else
                         {
-                            value = Expression.Constant(Activator.CreateInstance(typeof(Nullable<>).MakeGenericType(targetType), Value));
+                            // Nếu là nullable, chuyển đổi sang kiểu không nullable trước, sau đó tạo nullable
+                            var targetType = Nullable.GetUnderlyingType(nestedProperty.Type);
+                            var valueNew = Convert.ChangeType(Value, targetType);
+                            if (targetType == typeof(DateTime))
+                            {
+                                value = Expression.Constant(valueNew);
+                            }
+                            else
+                            {
+                                value = Expression.Constant(Activator.CreateInstance(typeof(Nullable<>).MakeGenericType(targetType), Value));
+                            }
                         }
                     }
                     else
@@ -260,6 +317,10 @@ namespace CRS.ChannelManager.Library.Base
                         {
                             var expressionChild = GetExpression(property, item);
                             expressionList.Add(expressionChild);
+                        }
+                        if (!expressionList.Any())
+                        {
+                            return null;
                         }
                         var body = expressionList.Aggregate((e, next) => Operator == OperatorNotIn ? Expression.AndAlso(e, next) : Expression.OrElse(e, next));
                         return Expression.Lambda<Func<T, bool>>(body, parameter);
