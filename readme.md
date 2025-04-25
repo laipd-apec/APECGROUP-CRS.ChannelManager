@@ -1,4 +1,4 @@
-# CRS - Booking Engine
+# CRS - Channel Manager
 
 **1. Techstack**
 
@@ -8,8 +8,3 @@
 - CQRS Pattern
 - Kafka for Event Bus
 - Redis for Cache
-  
-**2. Database Design**
-  
-![image](https://github.com/user-attachments/assets/be6ada77-6e61-4f74-adc0-63103fd8419e)
-
