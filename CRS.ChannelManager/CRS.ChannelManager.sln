@@ -1,0 +1,55 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35312.102
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRS.ChannelManager", "CRS.ChannelManager\CRS.ChannelManager.csproj", "{1C0C676F-8C42-4961-BFF7-D385DD29F8FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRS.ChannelManager.Application", "CRS.ChannelManager.Application\CRS.ChannelManager.Application.csproj", "{46D12C97-FDF7-4DC5-B7F2-CAFCA3754164}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRS.ChannelManager.Domain", "CRS.ChannelManager.Domain\CRS.ChannelManager.Domain.csproj", "{B6F4F825-82E6-4C5B-BEE3-97A7CF3F0330}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRS.ChannelManager.Infrastructure", "CRS.ChannelManager.Infrastructure\CRS.ChannelManager.Infrastructure.csproj", "{5B2895A7-1338-4D91-9C64-4388AE2616DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CRS.ChannelManager.Library", "CRS.ChannelManager.Library\CRS.ChannelManager.Library.csproj", "{003A51A0-55EB-4FAE-9DD8-ED5128894E20}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{2CB59F67-92C2-4D22-BEAD-F6D82A370A0F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1C0C676F-8C42-4961-BFF7-D385DD29F8FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C0C676F-8C42-4961-BFF7-D385DD29F8FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C0C676F-8C42-4961-BFF7-D385DD29F8FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C0C676F-8C42-4961-BFF7-D385DD29F8FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46D12C97-FDF7-4DC5-B7F2-CAFCA3754164}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46D12C97-FDF7-4DC5-B7F2-CAFCA3754164}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46D12C97-FDF7-4DC5-B7F2-CAFCA3754164}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46D12C97-FDF7-4DC5-B7F2-CAFCA3754164}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6F4F825-82E6-4C5B-BEE3-97A7CF3F0330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6F4F825-82E6-4C5B-BEE3-97A7CF3F0330}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6F4F825-82E6-4C5B-BEE3-97A7CF3F0330}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6F4F825-82E6-4C5B-BEE3-97A7CF3F0330}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B2895A7-1338-4D91-9C64-4388AE2616DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B2895A7-1338-4D91-9C64-4388AE2616DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B2895A7-1338-4D91-9C64-4388AE2616DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B2895A7-1338-4D91-9C64-4388AE2616DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{003A51A0-55EB-4FAE-9DD8-ED5128894E20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{003A51A0-55EB-4FAE-9DD8-ED5128894E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{003A51A0-55EB-4FAE-9DD8-ED5128894E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{003A51A0-55EB-4FAE-9DD8-ED5128894E20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CB59F67-92C2-4D22-BEAD-F6D82A370A0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CB59F67-92C2-4D22-BEAD-F6D82A370A0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CB59F67-92C2-4D22-BEAD-F6D82A370A0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CB59F67-92C2-4D22-BEAD-F6D82A370A0F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {40BBB9A4-4CB6-46C2-A3A4-00A12D814DDD}
+	EndGlobalSection
+EndGlobal

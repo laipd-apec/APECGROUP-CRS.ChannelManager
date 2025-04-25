@@ -1,0 +1,6 @@
+services:
+  crs.channelmanager:
+    image: registry.mandalahotel.com.vn/crs/crs_channelmanager:latest
+    build:
+      context: .
+      dockerfile: CRS.ChannelManager/Dockerfile
